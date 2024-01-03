@@ -1,12 +1,22 @@
-// To parse this JSON data, do
-//
-//     final usersPets = usersPetsFromJson(jsonString);
-
 import 'dart:convert';
 
-UsersPets usersPetsFromJson(String str) => UsersPets.fromJson(json.decode(str));
+UsersPets usersPetsFromJson(String str) {
+  try {
+    return UsersPets.fromJson(json.decode(str));
+  } catch (e) {
+    print("Error parsing UsersPets JSON: $e");
+    throw Exception("Failed to parse UsersPets JSON");
+  }
+}
 
-String usersPetsToJson(UsersPets data) => json.encode(data.toJson());
+String usersPetsToJson(UsersPets data) {
+  try {
+    return json.encode(data.toJson());
+  } catch (e) {
+    print("Error encoding UsersPets to JSON: $e");
+    throw Exception("Failed to encode UsersPets to JSON");
+  }
+}
 
 class UsersPets {
   UsersPets({
@@ -15,9 +25,16 @@ class UsersPets {
 
   final List<Datum> data;
 
-  factory UsersPets.fromJson(Map<String, dynamic> json) => UsersPets(
+  factory UsersPets.fromJson(Map<String, dynamic> json) {
+    try {
+      return UsersPets(
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
       );
+    } catch (e) {
+      print("Error creating UsersPets instance from JSON: $e");
+      rethrow;
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
@@ -39,13 +56,20 @@ class Datum {
   final String petImage;
   final bool isFriendly;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    try {
+      return Datum(
         id: json["id"],
         userName: json["userName"],
         petName: json["petName"],
         petImage: json["petImage"],
         isFriendly: json["isFriendly"],
       );
+    } catch (e) {
+      print("Error creating Datum instance from JSON: $e");
+      rethrow;
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
